@@ -1,0 +1,3 @@
+AI Use Log
+
+-ChatGPT4. Config setup for toolkit installation following https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration tutorial. Open config in cmd.exe with vdb-config -i. Navigate using Tab and enable caching and remote access. Create a cache file under C:\SRA\cache and establish the cache location. Save and exit config and test for accuracy with test sra files. 
