@@ -10,7 +10,7 @@ https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
 vdb-config -i
   # Navigate using Tab/Enter. Enable the following:
     # Remote Access
-      # Prefer SRA Lite files (optional, disable if errors with file transfer occur)
+      # Prefer SRA Lite files (optional, disable if errors with file transfer during prefetch occur)
   # Navigate to Cache. Enable the following:
     # Local file-caching
   # Set the location of the user-repository: Create an empty folder named "cache" for files to go 
@@ -32,6 +32,5 @@ fasterq-dump SRRXXXXX --temp C:\SRA\temp
 move SRRXXXXX.fastq C:\SRA\fastq
   # The file should show up in the "fastq" folder
 
-fasterq-dump SRR25781709 --temp C:\SRA\temp
-
+# Ready to begin Qiime2 analysis
 
