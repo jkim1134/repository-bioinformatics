@@ -32,5 +32,7 @@ fasterq-dump SRRXXXXX --temp C:\SRA\temp
 move SRRXXXXX.fastq C:\SRA\fastq
   # The file should show up in the "fastq" folder
 
+# Prepare a manifest file with sample ids
+
 # Ready to begin Qiime2 analysis
 
