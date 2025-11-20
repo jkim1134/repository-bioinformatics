@@ -1,11 +1,24 @@
-AI Use Log
+AI Use Log: Docker
 
 -ChatGPT4. How to set up the container in Docker and mount it to the folder we will work on for the right environment.
 -ChatGPT4. Finding the solutions for fixing errors originating from the differences between different versions of QIIME2. 
 -ChatGPT4. Asking for detailed explanations of what the code does in the upstream analysis.  
--ChatGPT4. Config setup for toolkit installation following https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration tutorial. Open config in cmd.exe with vdb-config -i. Navigate using Tab and enable caching and remote access. Create a cache file under C:\SRA\cache and establish the cache location. Save and exit config and test for accuracy with test sra files. 
+
+AI Use Log: Colab
+
+-ChatGPT4. Config setup for toolkit installation following https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration tutorial.
+  Open config in cmd.exe with vdb-config -i. Navigate using Tab and enable caching and remote access. Create a cache file under C:\SRA\cache and establish the cache location. 
+  Save and exit config and test for accuracy with test sra files. 
+
 -ChatGPT4. How to convert sra from ncbi (SRR25781925) into a fastq. Download the file using prefetch SRR25781925 in cmd.exe. 
--Gemini. Adjust the manifest file to run the qiime2 analysis. The column absolute-filepath-direction was not recognized and changed to absolute-filepath. The manifest.tsv format was changed from windows to linux to operate in a colab environment
+
+-Gemini. Adjust the manifest file and make corrections to run qiime2 analysis. The column absolute-filepath-direction was not recognized and changed to absolute-filepath.
+  The manifest.tsv path was changed from windows to linux to operate in a colab environment. 
+
+- Gemini. 
+
+
+
 
 
 
