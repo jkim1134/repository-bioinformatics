@@ -1,4 +1,4 @@
-# This is a basic workflow to start with Qiime2 analysis
+# This is a basic workflow to start with Qiime2 analysis in Colab. SRA Toolkit use for Docker in the Docker tutorial.
 
 # FASTQ files downloaded directly from NCBI will not provide quality scores. An SRA Toolkit is required
 
