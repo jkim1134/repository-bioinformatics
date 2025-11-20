@@ -1,0 +1,108 @@
+# SRA-Toolkit Version Check (https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit)
+C:\sratoolkit\bin\fasterq-dump.exe
+
+# Prefetching and converting SRA file to FASTQ (Repeating 10 times) 
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781641 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781671 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781756 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781792 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781827 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781835 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781850 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781893 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781907 -O C:\manure_amplicon
+C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\prefetch.exe SRR25781923 -O C:\manure_amplicon
+
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781641" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781671" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781756" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781792" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781827" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781835" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781850" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781893" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781907" -O "C:\manure_amplicon"
+"C:\sratoolkit.current-win64\sratoolkit.3.2.1-win64\bin\fasterq-dump.exe" "C:\manure_amplicon\SRR25781923" -O "C:\manure_amplicon"
+
+
+# Pull the Qiime2 image (amplcion:2025.10)
+docker pull quay.io/qiime2/amplicon:2025.10
+
+# Making a container for QIIME2 analysis
+docker run -it \
+  -v "C:\manure_amplicon":/data \
+  --name manure_qiime2 \
+  quay.io/qiime2/amplicon:2025.10
+
+
+# Upstream QIIME2 pipeline (Classifier: https://library.qiime2.org/data-resources)
+
+# Import FASTQ files to QZA  [single_end_demux.qza]
+qiime tools import \
+  --type 'SampleData[SequencesWithQuality]' \
+  --input-path /data/manifest.tsv \
+  --output-path /data/single_end_demux.qza \
+  --input-format SingleEndFastqManifestPhred33V2
+
+# Summarize demux for the quality plot [single_end_demux.qzv]
+qiime demux summarize \
+  --i-data /data/single_end_demux.qza \
+  --o-visualization /data/single_end_demux.qzv
+
+# DADA2 denoising [rep-seq.qza, ferature-table.qza, denoising-stats.qza, base-transition-stats.qza]
+qiime dada2 denoise-single \
+  --i-demultiplexed-seqs /data/single_end_demux.qza \
+  --p-trim-left 0 \
+  --p-trunc-len 250 \
+  --p-n-threads 16 \
+  --o-representative-sequences /data/rep-seqs.qza \
+  --o-table /data/feature-table.qza \
+  --o-denoising-stats /data/denoising-stats.qza \
+  --o-base-transition-stats /data/base-transition-stats.qza
+
+# Sequences summaries [feature-table.qzv, rep-seq.qzv, denoising-stats.qzv]
+qiime feature-table summarize \
+  --i-table /data/feature-table.qza \
+  --o-visualization /data/feature-table.qzv \
+
+qiime feature-table tabulate-seqs \
+  --i-data rep-seqs.qza \
+  --o-visualization rep-seqs.qzv
+
+qiime metadata tabulate \
+  --m-input-file denoising-stats.qza \
+  --o-visualization denoising-stats.qzv
+
+# Taxonomy annotation [taxonomy.qza]
+qiime feature-classifier classify-sklearn \
+  --i-classifier /data/classifier/silva-138-99-nb-classifier.qza \
+  --i-reads rep-seqs.qza \
+  --o-classification taxonomy.qza
+
+# Taxonomy visualization [taxonomy.qzv]
+qiime metadata tabulate \
+  --m-input-file /data/taxonomy.qza \
+  --o-visualization /data/taxonomy.qzv
+
+# Creating a taxa barplot to check if it is annotated correctly. [taxa-bar-plots.qzv]
+qiime taxa barplot \
+  --i-table /data/feature-table.qza \
+  --i-taxonomy /data/taxonomy.qza \
+  --o-visualization /data/taxa-bar-plots.qzv
+
+
+# Downstream (Have to make a metadata to run diversity core-metrics-phylogenetic) 
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences rep-seqs.qza \
+  --o-alignment aligned-rep-seqs.qza \
+  --o-masked-alignment masked-aligned-rep-seqs.qza \
+  --o-tree unrooted-tree.qza \
+  --o-rooted-tree rooted-tree.qza \
+  --p-n-threads 16 
+
+qiime diversity core-metrics-phylogenetic \
+--i-phylogeny downstream/rooted-tree.qza \
+--i-table feature-table.qza \
+--p-sampling-depth 1000 \
+--m-metadata-file metadata.tsv \
+--output-dir core-metrics-results
