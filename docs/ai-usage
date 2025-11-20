@@ -2,4 +2,7 @@ AI Use Log
 
 -ChatGPT4. Config setup for toolkit installation following https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration tutorial. Open config in cmd.exe with vdb-config -i. Navigate using Tab and enable caching and remote access. Create a cache file under C:\SRA\cache and establish the cache location. Save and exit config and test for accuracy with test sra files. 
 -ChatGPT4. How to convert sra from ncbi (SRR25781925) into a fastq. Download the file using prefetch SRR25781925 in cmd.exe. 
-cd 
+-Gemini. Adjust the manifest file to run the qiime2 analysis. The column absolute-filepath-direction was not recognized and changed to absolute-filepath. The manifest.tsv format was changed from windows to linux to operate in a colab environment
+
+
+
