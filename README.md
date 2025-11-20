@@ -1,2 +1,2 @@
 # repository-bioinformatics
-documentation for final project
+Ai usage documentation and pipelines used in the final project
