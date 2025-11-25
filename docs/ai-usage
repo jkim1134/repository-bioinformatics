@@ -21,8 +21,8 @@ AI Use Log: Colab
   (i.e., a column with at least two different values that are not all unique and not all empty) for the visualization to work. I will add a code cell to display the contents of your metadata.tsv file 
   so we can inspect it and identify the problematic column. Additional variables were added to the metadata file to run qiime diversity command. Success was tested by confirming the output of visualization files.
 
+AI Use Log
 
-
-
+-ChatGPT4. how to determine pathogenicity from a taxa barplot (Qiime2). Deeper level of analysis (level 6/7) required to review pathogenicity 
 
 
